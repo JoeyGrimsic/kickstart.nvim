@@ -5,7 +5,7 @@ return {
     lazy = false,
     config = function()
       require('themery').setup {
-        themes = { 'gruvbox', 'tokyonight', 'monokai', 'citruszest', 'ashen', 'linlin' },
+        themes = { 'gruvbox', 'tokyonight', 'monokai', 'citruszest', 'ashen' },
         livePreview = true,
       }
     end,
@@ -29,4 +29,15 @@ return {
   --      require('alpha').setup(require('alpha.themes.startify').config)
   --    end,
   --  },
+  {
+    'sainnhe/gruvbox-material',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.g.gruvbox_material_enable_italic = true
+      vim.cmd.colorscheme 'gruvbox-material'
+    end,
+  },
 }
