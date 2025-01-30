@@ -177,6 +177,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
 --
+
 -- [[ Toggle Syntax Highlighting ]]
 local function toggle_syntax()
   if vim.fn.exists 'g:syntax_on' == 1 then
@@ -185,6 +186,7 @@ local function toggle_syntax()
     vim.cmd 'syntax on'
   end
 end
+
 -- Keymap: Toggle syntax with <leader>th (toggle highlight)
 vim.keymap.set('n', '<leader>th', toggle_syntax, { desc = 'Toggle syntax highlighting' })
 
@@ -192,7 +194,7 @@ vim.keymap.set('n', '<leader>th', toggle_syntax, { desc = 'Toggle syntax highlig
 vim.keymap.set('n', '<leader>tv', function()
   local current = vim.diagnostic.config().virtual_text
   vim.diagnostic.config { virtual_text = not current }
-end, { desc = 'Toggle virtual text for diagnostics' })
+end, { desc = 'Toggle [V]irtual text for diagnostics' })
 
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
