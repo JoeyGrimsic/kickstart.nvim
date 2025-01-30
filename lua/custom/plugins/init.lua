@@ -1,5 +1,5 @@
 return {
-  -- Themery.nvim
+  -- Themery
   {
     'zaldih/themery.nvim',
     lazy = false,
@@ -10,8 +10,12 @@ return {
       }
     end,
   },
+  -- Colorbuddy
+  {
+    'tjdevries/colorbuddy.nvim',
+  },
 
-  -- Example themes
+  -- THEMES LIST
   { 'morhetz/gruvbox' }, -- Gruvbox
   --{ 'ayu-theme/ayu-vim' }, -- Ayu
   { 'folke/tokyonight.nvim' }, -- Tokyo Night
@@ -22,6 +26,7 @@ return {
   --{ 'sainnhe/everforest.git' },
   { 'ficcdaf/ashen.nvim' },
 
+  -- Alpha: Nvim Cover Page
   --  {
   --    'goolord/alpha-nvim',
   --    dependencies = { 'echasnovski/mini.icons' },
@@ -29,6 +34,8 @@ return {
   --      require('alpha').setup(require('alpha.themes.startify').config)
   --    end,
   --  },
+
+  -- Gruvbox-material
   {
     'sainnhe/gruvbox-material',
     lazy = false,
