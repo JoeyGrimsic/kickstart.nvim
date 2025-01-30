@@ -188,7 +188,7 @@ local function toggle_syntax()
 end
 
 -- Keymap: Toggle syntax with <leader>th (toggle highlight)
-vim.keymap.set('n', '<leader>th', toggle_syntax, { desc = 'Toggle syntax highlighting' })
+vim.keymap.set('n', '<leader>th', toggle_syntax, { desc = 'Toggle syntax [H]ighlighting' })
 
 -- Toggle virtual text for diagnostics
 vim.keymap.set('n', '<leader>tv', function()
