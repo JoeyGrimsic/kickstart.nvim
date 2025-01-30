@@ -160,11 +160,12 @@ vim.opt.scrolloff = 10
 --  See `:help vim.keymap.set()`
 
 -- Added tmux duplication
-vim.keymap.set('n', '<leader>td', function()
-  local file = vim.fn.shellescape(vim.fn.expand '%:p') -- Get current file path
+local function tmux_duplication()
+  local file = vim.fn.shellescape(vim.fn.expand '%:p')
   local cmd = 'tmux split-window -h -c "' .. vim.fn.getcwd() .. '" "nvim ' .. file .. '"'
-  vim.fn.execute('!' .. cmd) -- Execute the command in the shell
-end)
+  vim.fn.jobstart(cmd, { detach = true })
+end
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -176,6 +177,23 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
 --
+-- [[ Toggle Syntax Highlighting ]]
+local function toggle_syntax()
+  if vim.fn.exists 'g:syntax_on' == 1 then
+    vim.cmd 'syntax off'
+  else
+    vim.cmd 'syntax on'
+  end
+end
+-- Keymap: Toggle syntax with <leader>th (toggle highlight)
+vim.keymap.set('n', '<leader>th', toggle_syntax, { desc = 'Toggle syntax highlighting' })
+
+-- Toggle virtual text for diagnostics
+vim.keymap.set('n', '<leader>tv', function()
+  local current = vim.diagnostic.config().virtual_text
+  vim.diagnostic.config { virtual_text = not current }
+end, { desc = 'Toggle virtual text for diagnostics' })
+
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -459,6 +477,7 @@ require('lazy').setup({
     },
   },
   { 'Bilal2453/luvit-meta', lazy = true },
+
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -508,6 +527,13 @@ require('lazy').setup({
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
+
+      -- Disable LSP progress notifications
+      vim.lsp.handlers['$/progress'] = function() end
+
+      -- Track diagnostics state
+      local diagnostics_visible = true
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -557,6 +583,19 @@ require('lazy').setup({
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          map('<leader>ts', tmux_duplication, '[T]mux [S]plit')
+
+          --map('<leader>td', function()
+          --  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+          --end, '[T]oggle [D]iagnostics')
+
+          -- Toggle diagnostics with notifications (INSIDE the callback)
+          map('<leader>td', function()
+            diagnostics_visible = not diagnostics_visible
+            vim.diagnostic.enable(diagnostics_visible)
+            vim.notify('Diagnostics ' .. (diagnostics_visible and 'ON' or 'OFF'))
+          end, '[T]oggle [D]iagnostics')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
