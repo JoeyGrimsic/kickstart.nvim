@@ -159,6 +159,9 @@ vim.opt.scrolloff = 10
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- added ctrl+backspace to delete previous word
+vim.keymap.set('i', '<C-BS>', '<C-w>', { noremap = true, silent = true, desc = 'Delete previous word' })
+
 -- Added tmux duplication
 local function tmux_duplication()
   local file = vim.fn.shellescape(vim.fn.expand '%:p')
