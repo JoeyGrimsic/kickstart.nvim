@@ -8,19 +8,20 @@ return {
         themes = { 'gruvbox', 'tokyonight', 'monokai', 'citruszest', 'ashen', 'gruvbox-material' },
         livePreview = true,
         beforeReload = function(theme)
-          _G.force_transparency()
+          --_G.force_transparency() --uncomment to enable transparency by default
         end,
       }
     end,
   },
 
   { 'jiangmiao/auto-pairs' },
+
   -- Universal transparency setup with toggle
   {
     'nvim-lua/plenary.nvim',
     config = function()
-      -- State management
-      _G.transparency_enabled = true
+      -- State management (set default to false)
+      _G.transparency_enabled = false
 
       -- Transparency function
       _G.force_transparency = function()
@@ -45,9 +46,6 @@ return {
           vim.notify('Transparency disabled', vim.log.levels.INFO)
         end
       end
-
-      -- Initial application
-      vim.schedule(_G.force_transparency)
 
       -- Theme change handler
       vim.api.nvim_create_autocmd('ColorScheme', {
