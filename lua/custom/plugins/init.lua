@@ -14,6 +14,7 @@ return {
     end,
   },
 
+  { 'jiangmiao/auto-pairs' },
   -- Universal transparency setup with toggle
   {
     'nvim-lua/plenary.nvim',
