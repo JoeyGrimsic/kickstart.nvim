@@ -605,7 +605,7 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        tsserver = {},
+        ts_ls = {},
         pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -646,12 +646,12 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'tsserver',
+        'typescript-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
-        ensure_installed = { 'lua_ls', 'jdtls' },
+        ensure_installed = { 'lua_ls', 'jdtls', 'ts_ls' },
         automatic_installation = true, -- or false, depending on preference
         handlers = {
           function(server_name)
