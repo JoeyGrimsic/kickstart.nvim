@@ -1,5 +1,9 @@
 -- clipboard.lua
 
+-- Detect if running in WSL
+local is_wsl = os.getenv 'WSL_DISTRO_NAME' ~= nil
+local has_win32yank = vim.fn.executable 'win32yank.exe' == 1
+
 -- Detect whether we are on Wayland
 local is_wayland = (os.getenv 'WAYLAND_DISPLAY' ~= nil)
 
@@ -7,7 +11,21 @@ local is_wayland = (os.getenv 'WAYLAND_DISPLAY' ~= nil)
 local has_wl_clip = (vim.fn.executable 'wl-copy' == 1)
 local has_xclip = (vim.fn.executable 'xclip' == 1)
 
-if is_wayland and has_wl_clip then
+if is_wsl and has_win32yank then
+  -- WSL + win32yank
+  vim.g.clipboard = {
+    name = 'win32yank (WSL)',
+    copy = {
+      ['+'] = 'win32yank.exe -i --crlf',
+      ['*'] = 'win32yank.exe -i --crlf',
+    },
+    paste = {
+      ['+'] = 'win32yank.exe -o --lf',
+      ['*'] = 'win32yank.exe -o --lf',
+    },
+    cache_enabled = 1,
+  }
+elseif is_wayland and has_wl_clip then
   -- Wayland + wl-clipboard
   vim.g.clipboard = {
     name = 'wl-clipboard (Wayland)',
@@ -36,6 +54,6 @@ elseif has_xclip then
     cache_enabled = 1,
   }
 else
-  -- Fallback: rely on Neovim’s built-in unnamedplus or do nothing
+  -- Fallback: rely on Neovim's built-in unnamedplus or do nothing
   vim.opt.clipboard = 'unnamedplus'
 end
